@@ -1,44 +1,56 @@
 import 'dart:io';
 
-
-HomeInterfaceView(bool condicao, opcoes, int tam) {
+homeInterfaceView() {
   String? resp;
-  print('Bem-vindo gostária de criar uma lista de convidados? Y/N.');
+  print('Bem-vindo gostaria de criar uma lista de convidados? Y/N.');
   resp = stdin.readLineSync();
   if (resp == "Y") {
-    MenuOp();
+    menuOp();
   } else {
     print("===========PROGRAMA FINALIZADO==============");
   }
 }
 
-MenuOp() {
+menuOp() async {
   String? menuresp;
   String? nomelista;
+  String? titlelista;
   int? tamlist;
   List<String> convidados = [];
 
   print('Qual será o nome da sua lista');
-  nomelista = stdin.readLineSync();
-  print("=========== NOME DA LISTA: $nomelista ==============");
-  print("Quantos convidados gostária de adicionar a lista? ");
+  titlelista = stdin.readLineSync();
+  print('');
+  print("=========== NOME DA LISTA: $titlelista ==============");
+  print('');
+  print("Quantos convidados gostaria de adicionar a lista? ");
   tamlist = int.parse(stdin.readLineSync()!);
-  print("LISTA PARA: $nomelista, COM $tamlist CONVIDADOS");
-
-  print("Favor digitar abaixo os nomes dos convidados.");
+  print('');
+  print(
+      "=========== LISTA: $titlelista, COM $tamlist CONVIDADOS ==============");
+  print('');
+  print(
+      "Favor digitar abaixo os nomes dos convidados(Quando digitar pressione ENTER para inserir)");
   //nomelista = stdin.readLineSync();
+  convidados.add('---------------- Nome da lista: $titlelista ----------------');
+  convidados.add('                        Convidados:');
 
-  for (var i = 0; i <= tamlist; i++) {
+  for (var i = 0; i <= tamlist - 1; i++) {
     nomelista = stdin.readLineSync();
-    convidados.add(nomelista as String);
+    print('-----');
+    convidados.add('                           $nomelista');
   }
+  
 
-  print("Gostária de gerar sua lista em um arquivo de texto?");
- 
-
-  //print(convidados); printa lista
-  //DEIXAR VERIFICAÇÃO DO MENU PARA O FINAL.
-  // if (nomelista == "") {
-  // print("Digite um nome válido");
-  //}
+  print('');
+  print("Gostaria de gerar sua lista em um arquivo de texto? Y/N");
+  menuresp = stdin.readLineSync();
+  if (menuresp == "Y") {
+    //var file = File('lista_convidados.txt');
+    var fileCopy = await File('lista_de_convidados_para_$titlelista.txt')
+        .writeAsString(convidados.join("\n").toString());
+    RandomAccessFile raf = fileCopy.openSync(mode: FileMode.append);
+  } else {
+    print("===========PROGRAMA FINALIZADO==============");
+  }
 }
